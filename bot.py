@@ -90,7 +90,7 @@ def start_message(message):
         "3. Наслаждайтесь результатом!"
     )
 
-    # Проверяем админа - только для вас показываем админ-панель
+    # Проверяем админа
     if db.is_admin(user_id):
         welcome_text += "\n\n👑 *Доступна админ-панель:* /admin"
 
@@ -100,7 +100,7 @@ def start_message(message):
 
 @bot.message_handler(commands=['myid'])
 def my_id_command(message):
-    """Показать мой user_id - ИСПРАВЛЕННАЯ ВЕРСИЯ"""
+    """Показать мой user_id"""
     try:
         user_id = message.from_user.id
         first_name = message.from_user.first_name or "Не указано"
@@ -157,7 +157,7 @@ def help_command(message):
         "💡 *Совет:* Используйте кнопки для быстрого доступа!"
     )
 
-    # Только администраторам показываем команду админ-панели
+    # Показ админ-панели только админам
     if db.is_admin(user_id):
         help_text += "\n\n👑 *Админ-команды:*\n/admin - Админ-панель"
 
@@ -209,11 +209,11 @@ def history_command(message):
     bot.send_message(message.chat.id, history_text, parse_mode='Markdown')
 
 
-# ==================== ИСПРАВЛЕННАЯ АДМИН-ПАНЕЛЬ ====================
+# =================== АДМИН-ПАНЕЛЬ ====================
 
 @bot.message_handler(commands=['admin'])
 def admin_command(message):
-    """Админ-панель - ТОЛЬКО для администраторов"""
+    """Админ-панель"""
     user_id = message.from_user.id
 
     if not db.is_admin(user_id):
@@ -392,7 +392,7 @@ def handle_admin_users_buttons(message):
         admin_command(message)
 
 
-# ИСПРАВЛЕННЫЕ ОБРАБОТЧИКИ ПРОСМОТРА ПЕРЕВОДОВ
+# ОБРАБОТЧИКИ ПРОСМОТРА ПЕРЕВОДОВ
 @bot.message_handler(func=lambda message: message.text in [
     '📜 Последние переводы', '🔍 Поиск по пользователю',
     '📅 Переводы за сегодня', '🔙 В админ-панель'

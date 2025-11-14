@@ -49,12 +49,6 @@ class Database:
             )
         ''')
 
-        # Автоматически делаем пользователя 8029786245 администратором
-        cursor.execute('''
-            INSERT OR IGNORE INTO users (user_id, username, first_name, is_admin) 
-            VALUES (?, ?, ?, ?)
-        ''', (8029786245, 'admin_user', 'Admin', True))
-
         conn.commit()
         conn.close()
 
@@ -64,15 +58,8 @@ class Database:
         cursor = conn.cursor()
 
         try:
-            # Если это администратор, сохраняем права
-            if user_id == 8029786245:
-                cursor.execute('''
-                    INSERT OR REPLACE INTO users (user_id, username, first_name, last_name, is_admin) 
-                    VALUES (?, ?, ?, ?, ?)
-                ''', (user_id, username, first_name, last_name, True))
-            else:
-                cursor.execute('''
-                    INSERT OR REPLACE INTO users (user_id, username, first_name, last_name) 
+            cursor.execute('''
+                    INSERT OR REPLACE INTO users (user_id, username, first_name, last_name)
                     VALUES (?, ?, ?, ?)
                 ''', (user_id, username, first_name, last_name))
 
@@ -218,7 +205,7 @@ class Database:
         try:
             cursor.execute('''
                 UPDATE users SET is_admin = FALSE WHERE user_id = ? AND user_id != ?
-            ''', (target_user_id, 8029786245))  # Нельзя удалить главного админа
+            ''', (target_user_id))  # Нельзя удалить главного админа
 
             conn.commit()
             return cursor.rowcount > 0
