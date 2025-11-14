@@ -1,3 +1,7 @@
 import os
+from dotenv import load_dotenv
 
-BOT_TOKEN = os.environ.get('BOT_TOKEN') or "8101623867:AAGlo_rLdMnesEB0a_j01ZPQRhTcsXqS3cA"
+load_dotenv()
+
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_IDS = [int(x.strip()) for x in os.getenv('ADMIN_IDS', '').split(',') if x.strip()]

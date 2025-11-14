@@ -58,10 +58,14 @@ class Database:
         cursor = conn.cursor()
 
         try:
+            # Проверяем, является ли пользователь администратором из config
+            from config import ADMIN_IDS
+            is_admin = user_id in ADMIN_IDS
+
             cursor.execute('''
-                    INSERT OR REPLACE INTO users (user_id, username, first_name, last_name)
-                    VALUES (?, ?, ?, ?)
-                ''', (user_id, username, first_name, last_name))
+                INSERT OR REPLACE INTO users (user_id, username, first_name, last_name, is_admin) 
+                VALUES (?, ?, ?, ?, ?)
+            ''', (user_id, username, first_name, last_name, is_admin))
 
             conn.commit()
         except Exception as e:
