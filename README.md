@@ -23,17 +23,17 @@
 
 <table>
   <tr>
-    <td align="center"><strong>Главное меню</strong><br><img src="main-menu.png" width="300"><br>Интуитивное управление</td>
-    <td align="center"><strong>Приветствие</strong><br><img src="welcome.png" width="300"><br>Добро пожаловать в бот</td>
-    <td align="center"><strong>Выбор языка</strong><br><img src="language-select.png" width="300"><br>Поддержка 8+ языков</td>
+    <td align="center"><strong>Главное меню</strong><br><img src="screenshots/main-menu.png" width="300"><br>Интуитивное управление</td>
+    <td align="center"><strong>Приветствие</strong><br><img src="screenshots/welcome.png" width="300"><br>Добро пожаловать в бот</td>
+    <td align="center"><strong>Выбор языка</strong><br><img src="screenshots/language-select.png" width="300"><br>Поддержка 8+ языков</td>
   </tr>
   <tr>
-    <td align="center"><strong>Процесс перевода</strong><br><img src="translation.png" width="300"><br>Мгновенный перевод</td>
-    <td align="center"><strong>Админ-панель</strong><br><img src="admin-panel.png" width="300"><br>Центр управления</td>
-    <td align="center"><strong>Статистика</strong><br><img src="stats.png" width="300"><br>Детальная аналитика</td>
+    <td align="center"><strong>Процесс перевода</strong><br><img src="screenshots/translation.png" width="300"><br>Мгновенный перевод</td>
+    <td align="center"><strong>Админ-панель</strong><br><img src="screenshots/admin-panel.png" width="300"><br>Центр управления</td>
+    <td align="center"><strong>Статистика</strong><br><img src="screenshots/stats.png" width="300"><br>Детальная аналитика</td>
   </tr>
   <tr>
-    <td align="center" colspan="3"><strong>Управление пользователями</strong><br><img src="user-management.png" width="300"><br>Контроль пользователей</td>
+    <td align="center" colspan="3"><strong>Управление пользователями</strong><br><img src="screenshots/user-management.png" width="300"><br>Контроль пользователей</td>
   </tr>
 </table>
 
