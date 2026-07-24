@@ -12,17 +12,14 @@ class Database:
         self.init_db()
 
     def get_connection(self):
-        """Создать соединение с базой данных"""
         conn = sqlite3.connect(self.db_name)
         conn.row_factory = sqlite3.Row
         return conn
 
     def init_db(self):
-        """Инициализировать таблицы в базе данных"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
-        # Таблица пользователей
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 user_id INTEGER PRIMARY KEY,
@@ -35,7 +32,6 @@ class Database:
             )
         ''')
 
-        # Таблица истории переводов
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS translation_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,12 +49,10 @@ class Database:
         conn.close()
 
     def add_user(self, user_id: int, username: str, first_name: str, last_name: str = ''):
-        """Добавить нового пользователя"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
         try:
-            # Проверяем, является ли пользователь администратором из config
             from config import ADMIN_IDS
             is_admin = user_id in ADMIN_IDS
 
@@ -74,7 +68,6 @@ class Database:
             conn.close()
 
     def set_user_language(self, user_id: int, language_code: str):
-        """Установить язык пользователя"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -89,7 +82,6 @@ class Database:
             conn.close()
 
     def get_user_language(self, user_id: int) -> Optional[str]:
-        """Получить язык пользователя"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -105,7 +97,6 @@ class Database:
 
     def add_translation(self, user_id: int, original_text: str, translated_text: str,
                         source_lang: str, target_lang: str):
-        """Добавить запись в историю переводов"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -122,7 +113,6 @@ class Database:
             conn.close()
 
     def get_user_history(self, user_id: int, limit: int = 10) -> List[Dict]:
-        """Получить историю переводов пользователя"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -143,7 +133,6 @@ class Database:
             conn.close()
 
     def get_all_users(self) -> List[Dict]:
-        """Получить всех пользователей"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -163,7 +152,6 @@ class Database:
             conn.close()
 
     def get_admins(self) -> List[Dict]:
-        """Получить всех администраторов"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -184,7 +172,6 @@ class Database:
             conn.close()
 
     def make_admin(self, target_user_id: int) -> bool:
-        """Сделать пользователя администратором"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -202,14 +189,13 @@ class Database:
             conn.close()
 
     def remove_admin(self, target_user_id: int) -> bool:
-        """Убрать права администратора"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
         try:
             cursor.execute('''
                 UPDATE users SET is_admin = FALSE WHERE user_id = ? AND user_id != ?
-            ''', (target_user_id))  # Нельзя удалить главного админа
+            ''', (target_user_id))
 
             conn.commit()
             return cursor.rowcount > 0
@@ -220,7 +206,6 @@ class Database:
             conn.close()
 
     def get_recent_translations(self, limit: int = 50) -> List[Dict]:
-        """Получить последние переводы"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -242,7 +227,6 @@ class Database:
             conn.close()
 
     def get_translations_by_user(self, user_id: int, limit: int = 20) -> List[Dict]:
-        """Получить переводы конкретного пользователя"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -263,7 +247,6 @@ class Database:
             conn.close()
 
     def get_translations_by_date(self, date: str) -> List[Dict]:
-        """Получить переводы за конкретную дату"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -285,7 +268,6 @@ class Database:
             conn.close()
 
     def get_user_stats(self, user_id: int) -> Dict:
-        """Получить статистику пользователя"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -320,7 +302,6 @@ class Database:
             conn.close()
 
     def get_global_stats(self) -> Dict:
-        """Получить глобальную статистику"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -347,7 +328,6 @@ class Database:
             active_week_result = cursor.fetchone()
             active_week = active_week_result['active'] if active_week_result else 0
 
-            # Самый активный пользователь
             cursor.execute('''
                 SELECT u.first_name, u.username, COUNT(*) as count 
                 FROM translation_history th 
@@ -384,7 +364,6 @@ class Database:
             conn.close()
 
     def is_admin(self, user_id: int) -> bool:
-        """Проверить, является ли пользователь администратором"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -399,7 +378,6 @@ class Database:
             conn.close()
 
     def user_exists(self, user_id: int) -> bool:
-        """Проверить, существует ли пользователь"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -414,7 +392,6 @@ class Database:
             conn.close()
 
     def get_user_info(self, user_id: int) -> Optional[Dict]:
-        """Получить информацию о пользователе"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -429,7 +406,6 @@ class Database:
             conn.close()
 
     def get_top_languages(self) -> List[Dict]:
-        """Получить самые популярные языки"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -451,7 +427,6 @@ class Database:
             conn.close()
 
     def clear_history(self, days: int = None) -> int:
-        """Очистить историю переводов - ИСПРАВЛЕННАЯ ВЕРСИЯ"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
@@ -471,27 +446,22 @@ class Database:
             conn.close()
 
     def export_data_json(self) -> str:
-        """Экспорт данных в JSON"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
         try:
-            # Пользователи
             cursor.execute('SELECT * FROM users')
             users = []
             for row in cursor.fetchall():
                 user = dict(row)
-                # Конвертируем datetime в строку
                 if 'created_at' in user:
                     user['created_at'] = str(user['created_at'])
                 users.append(user)
 
-            # История переводов
             cursor.execute('SELECT * FROM translation_history ORDER BY timestamp DESC LIMIT 1000')
             translations = []
             for row in cursor.fetchall():
                 trans = dict(row)
-                # Конвертируем datetime в строку
                 if 'timestamp' in trans:
                     trans['timestamp'] = str(trans['timestamp'])
                 translations.append(trans)
@@ -512,24 +482,20 @@ class Database:
             conn.close()
 
     def export_data_csv(self) -> str:
-        """Экспорт данных в CSV"""
         conn = self.get_connection()
         cursor = conn.cursor()
 
         try:
-            # Пользователи
             cursor.execute('SELECT * FROM users')
             users = [dict(row) for row in cursor.fetchall()]
 
-            # История переводов
             cursor.execute('SELECT * FROM translation_history ORDER BY timestamp DESC LIMIT 1000')
             translations = [dict(row) for row in cursor.fetchall()]
 
             output = StringIO()
             writer = csv.writer(output)
 
-            # Заголовки для пользователей
-            writer.writerow(['=== ПОЛЬЗОВАТЕЛИ ==='])
+            writer.writerow(['ПОЛЬЗОВАТЕЛИ'])
             writer.writerow(['User ID', 'Username', 'First Name', 'Last Name', 'Language', 'Created At', 'Is Admin'])
             for user in users:
                 writer.writerow([
@@ -543,14 +509,14 @@ class Database:
                 ])
 
             writer.writerow([])
-            writer.writerow(['=== ПЕРЕВОДЫ ==='])
+            writer.writerow(['ПЕРЕВОДЫ'])
             writer.writerow(
                 ['ID', 'User ID', 'Original Text', 'Translated Text', 'Source Lang', 'Target Lang', 'Timestamp'])
             for trans in translations:
                 writer.writerow([
                     trans['id'],
                     trans['user_id'],
-                    (trans['original_text'] or '')[:100],  # Ограничиваем длину текста
+                    (trans['original_text'] or '')[:100],
                     (trans['translated_text'] or '')[:100],
                     trans['source_lang'] or 'auto',
                     trans['target_lang'] or 'en',
@@ -565,5 +531,5 @@ class Database:
             conn.close()
 
 
-# Глобальный экземпляр базы данных
+
 db = Database()
